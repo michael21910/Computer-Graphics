@@ -31,34 +31,25 @@ void main() {
   //   3. Clamp   : https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/clamp.xhtml
   //   3. Mix     : https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/mix.xhtml
 
-  // FragColor = vec4(0);
-  vec3 I = normalize(fs_in.viewPosition);
+  vec3 I = normalize(fs_in.position - fs_in.viewPosition);
   vec3 N = normalize(fs_in.normal);
   vec3 R = reflect(I, N);
   vec3 refractColor = vec3(0);
-  vec3 reflectColor = vec3(0);
+  bool firstRefraction = true;
+
   for (int i = 0; i < 3; i++) {
-    float eta = Eta[i];
-    float cosi = clamp(dot(I, N), -1.0, 1.0);
-    float etai = 1.0;
-    float etat = eta;
-    if (cosi < 0.0) {
-      cosi = -cosi;
-    } else {
-      float tmp = etai;
-      etai = etat;
-      etat = tmp;
-      N = -N;
+    vec3 T = refract(I, N, Eta[i]);
+    if (firstRefraction) {
+      refractColor += texture(skybox, T).rgb; 
+      firstRefraction = false;
     }
-    float sint = etai / etat * sqrt(max(0.0, 1.0 - cosi * cosi));
-    if (sint >= 1.0) {
-      refractColor[i] = 0.0;
-    } else {
-      float cost = sqrt(max(0.0, 1.0 - sint * sint));
-      vec3 t = refract(I, N, etai / etat);
-      refractColor[i] = fresnelBias + fresnelScale * pow(1 + dot(I, N), fresnelPower);
-    }
-    reflectColor[i] = fresnelBias + fresnelScale * pow(1 + dot(I, N), fresnelPower);
   }
-  FragColor = vec4(mix(refractColor, reflectColor, 0.5), 1.0);
+  refractColor /= 3.0;
+
+  vec3 reflectColor = texture(skybox, R).rgb;
+  float fresnel = clamp(fresnelBias + fresnelScale * pow(1.0 + dot(I, N), fresnelPower), 0.0, 1.0);
+
+  vec3 finalColor = mix(reflectColor, refractColor, fresnel);
+
+  FragColor = vec4(finalColor, 1.0);
 }
