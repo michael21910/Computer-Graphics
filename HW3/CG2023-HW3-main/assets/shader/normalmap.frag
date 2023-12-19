@@ -39,8 +39,6 @@ void main() {
   vec3 diffuseColor = texture(diffuseTexture, textureCoordinate).rgb;
   // Ambient intensity
   float ambient = 0.1;
-  float diffuse;
-  float specular;
   // TODO4: Blinn-Phong shading
   //   1. Query normalTexture using to find this fragment's normal
   //   2. Convert the value from RGB [0, 1] to normal [-1, 1], this will be inverse of what you do in calculatenormal.frag's output.
@@ -49,19 +47,17 @@ void main() {
   //   5. specular = ks * pow(max(normal vector dot halfway direction), 0.0), shininess);
   //   6. diffuse = kd * max(normal vector dot light direction, 0.0)
 
-  vec3 normal = texture(normalTexture, textureCoordinate).rgb * 2.0 - 1.0;
+  vec3 normal = texture(normalTexture, textureCoordinate).rgb;
+  normal = normalize(normal * 2.0 - 1.0);
   normal = normalize(normal);
-
-  vec3 lightDir = normalize(fs_in.lightDirection);
-  vec3 viewDir = normalize(fs_in.viewPosition - fs_in.position);
-  vec3 halfwayDir = normalize(lightDir + viewDir);
 
   float ks = 0.75;
   float kd = 0.75;
   float shininess = 8.0;
-  
-  diffuse = kd * max(dot(normal, lightDir), 0.0);
-  specular = ks * pow(max(dot(normal, halfwayDir), 0.0), shininess);
+
+  vec3 halfwayDirection = normalize(fs_in.lightDirection + viewDirectionection);
+  float specular = ks * pow(max(dot(normal, halfwayDirection), 0.0), shininess);
+  float diffuse = kd * max(dot(normal, fs_in.lightDirection), 0.0);
 
   float lighting = ambient + diffuse + specular;
   FragColor = vec4(lighting * diffuseColor, 1.0);
