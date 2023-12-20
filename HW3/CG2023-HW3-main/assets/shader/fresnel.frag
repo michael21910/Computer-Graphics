@@ -43,7 +43,7 @@ void main() {
   refractColor /= 3.0;
 
   vec3 reflectColor = texture(skybox, R).rgb;
-  float fresnel = clamp(fresnelBias + fresnelScale * pow(1.0 + dot(I, N), fresnelPower), 0.0, 1.0);
+  float fresnel = clamp((1 - fresnelBias) + fresnelScale * pow(1.0 + dot(I, N), fresnelPower), 0.0, 1.0);
 
   vec3 finalColor = mix(reflectColor, refractColor, fresnel);
 
