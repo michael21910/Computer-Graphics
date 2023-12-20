@@ -30,7 +30,7 @@ void main() {
   vec3 p3 = vec3(fragCoord + dx + dy, sin(offset - 0.1 * (fragCoord.y + delta)));
 
   vec3 normal1 = normalize(cross(p1 - p0, p2 - p0));
-  vec3 normal2 = normalize(cross(p2 - p1, p3 - p1));
+  vec3 normal2 = normalize(cross(p3 - p1, p2 - p1));
 
   vec3 avgNormal = normalize(normal1 + normal2) * 0.5 + 0.5;
 

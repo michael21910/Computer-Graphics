@@ -49,7 +49,6 @@ void main() {
 
   vec3 normal = texture(normalTexture, textureCoordinate).rgb;
   normal = normalize(normal * 2.0 - 1.0);
-  normal = normalize(normal);
 
   float ks = 0.75;
   float kd = 0.75;

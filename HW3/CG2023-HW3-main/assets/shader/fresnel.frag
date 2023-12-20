@@ -35,14 +35,10 @@ void main() {
   vec3 N = normalize(fs_in.normal);
   vec3 R = reflect(I, N);
   vec3 refractColor = vec3(0);
-  bool firstRefraction = true;
 
   for (int i = 0; i < 3; i++) {
     vec3 T = refract(I, N, Eta[i]);
-    if (firstRefraction) {
       refractColor += texture(skybox, T).rgb; 
-      firstRefraction = false;
-    }
   }
   refractColor /= 3.0;
 
