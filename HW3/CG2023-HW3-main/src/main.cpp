@@ -86,7 +86,7 @@ int main() {
   /* TODO#0: Change window title to "HW3 - `your student id`"
    *         Ex. HW3 - 312550000
    */
-  glfwSetWindowTitle(window, "HW3 - TA");
+  glfwSetWindowTitle(window, "HW3 - 312551077");
   glfwSetKeyCallback(window, keyCallback);
   glfwSetFramebufferSizeCallback(window, resizeCallback);
   // glEnable(GL_BLEND);
