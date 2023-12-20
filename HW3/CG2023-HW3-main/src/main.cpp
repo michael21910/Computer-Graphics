@@ -43,7 +43,7 @@ bool useSphere = true;
 static int currentSceneIndex = 0;
 
 // TODO (Bonus-Displacement): Change 'planeSubDivision' to >= 100, otherwise displacement mapping will not look good.
-constexpr int planeSubDivision = 100;
+constexpr int planeSubDivision = 1;
 constexpr int CAMERA_COUNT = 1;
 constexpr int MESH_COUNT = 4;
 constexpr int SHADER_PROGRAM_COUNT = 4;
@@ -244,8 +244,8 @@ int main() {
     // update switches
     if (updateMapping) {
       shaderPrograms[2].use();
-      shaderPrograms[2].setUniform("useDisplacementMapping", useDisplacement);
       shaderPrograms[2].setUniform("useParallaxMapping", useParallax);
+      shaderPrograms[2].setUniform("useDisplacementMapping", useDisplacement);
       updateMapping = false;
     }
     // Update normal map

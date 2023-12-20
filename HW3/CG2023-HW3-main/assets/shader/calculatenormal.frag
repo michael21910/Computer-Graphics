@@ -17,9 +17,6 @@ void main() {
   //   2. A simple tranform from [-1, 1] to [0, 1] is f(x) = x * 0.5 + 0.5
   //   3. For sample points, z = H(x +- delta, y +- delta)
 
-  // normal = vec4(0);
-  // height = 0.5;
-
   vec2 fragCoord = gl_FragCoord.xy;
 
   vec2 dx = vec2(delta, 0.0);

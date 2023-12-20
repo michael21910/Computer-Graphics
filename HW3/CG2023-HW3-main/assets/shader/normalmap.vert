@@ -39,10 +39,10 @@ void main() {
   //   2. Transform light direction, viewPosition, and position to the tangent space.
   //   3. (Bonus-Displacement) Query height from heightTexture.
 
-  mat3 TBN = mat3(tangent_in, bitangent_in, normal_in);
+  mat3 TBN = transpose(mat3(tangent_in, bitangent_in, normal_in));
 
   vs_out.lightDirection = TBN * lightDirection;
-  vs_out.viewPosition = TBN * viewPosition.xyz;
+  vs_out.viewPosition = TBN * (viewPosition.xyz - position_in);
   vs_out.position = TBN * position_in;
 
   float height = texture(heightTexture, textureCoordinate_in).r;
