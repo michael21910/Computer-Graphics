@@ -35,19 +35,15 @@ void main() {
   vec3 N = normalize(fs_in.normal);
   vec3 R = reflect(I, N);
   vec3 refractColor = vec3(0);
-  bool firstRefraction = true;
 
   for (int i = 0; i < 3; i++) {
     vec3 T = refract(I, N, Eta[i]);
-    if (firstRefraction) {
       refractColor += texture(skybox, T).rgb; 
-      firstRefraction = false;
-    }
   }
   refractColor /= 3.0;
 
   vec3 reflectColor = texture(skybox, R).rgb;
-  float fresnel = clamp(fresnelBias + fresnelScale * pow(1.0 + dot(I, N), fresnelPower), 0.0, 1.0);
+  float fresnel = clamp((1 - fresnelBias) + fresnelScale * pow(1.0 + dot(I, N), fresnelPower), 0.0, 1.0);
 
   vec3 finalColor = mix(reflectColor, refractColor, fresnel);
 
